@@ -37,13 +37,13 @@ const sendWelcomeEmail = async ({ email, companyName, subdomain, firstName, temp
                 
                 <div class="credentials">
                     <h3>Your Login Details:</h3>
-                    <strong>CRM URL:</strong> <a href="https://www.safecomcrm.com">https://www.safecomcrm.com</a><br>
+                    <strong>CRM URL:</strong> <a href="https://safecom-crm.vercel.app/login">https://safecom-crm.vercel.app/login</a><br>
                     <strong>Email:</strong> ${email}<br>
                     <strong>Password:</strong> <code>${tempPassword}</code>
                 </div>
                 
                
-                <a href="https://www.safecomcrm.com" class="btn">Access Your Dashboard</a>
+                <a href="https://safecom-crm.vercel.app/login" class="btn">Access Your Dashboard</a>
                 
                 <h3>Next Steps:</h3>
                 <ol>
