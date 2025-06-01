@@ -74,7 +74,7 @@ router.get('/check-subdomain', subdomainCheckLimiter, async (req, res) => {
 
   } catch (error) {
     console.error('Subdomain check error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+     return res.status(500).json({ error: 'Internal server error'  , error: error});
   }
 });
 
