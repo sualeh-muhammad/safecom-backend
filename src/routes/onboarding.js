@@ -159,8 +159,8 @@ router.post('/reserve-company', registerLimiter, async (req, res) => {
         quantity: 1,
       }],
       mode: 'subscription',
-      success_url: `${process.env.FRONTEND_URL}/onboarding/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.FRONTEND_URL}/onboarding/cancelled`,
+      success_url: `${process.env.FRONTEND_WEB_URL}/onboarding/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.FRONTEND_WEB_URL}/onboarding/cancelled`,
       metadata: {
         companyId: company.id,
         subdomain: sanitizedSubdomain,
