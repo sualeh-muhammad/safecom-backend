@@ -148,201 +148,201 @@ router.get('/forms/:hash', async (req, res) => {
     });
 
     // Format all ACTIVE forms into a unified structure
-    const activeForms = [
+     const activeForms = [
       // EXISTING FORMS
-      ...siteSignInForms.map(form => ({
+      ...siteSignInForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Site Sign-In',
-        formType: 'siteSignIn',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/siteSignIn/${form.id}`
+        type: "Site Sign-In",
+        formType: "siteSignIn",
+        category: "General",
+        publicUrl: `/forms/${form.id}/sign-in`,
       })),
-      ...siteInductionForms.map(form => ({
+      ...siteInductionForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Site Induction',
-        formType: 'siteInduction',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/siteInduction/${form.id}`
+        type: "Site Induction",
+        formType: "siteInduction",
+        category: "General",
+        publicUrl: `/forms/${form.id}/site-induction`, // Note: This route doesn't exist in your routes
       })),
-      ...safetyCheckForms.map(form => ({
+      ...safetyCheckForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Safety Check',
-        formType: 'safetyCheck',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/safetyCheck/${form.id}`
+        type: "Safety Check",
+        formType: "safetyCheck",
+        category: "General",
+        publicUrl: `/forms/${form.id}/safety-check`, // Note: This route doesn't exist in your routes
       })),
-      ...incidentReportForms.map(form => ({
+      ...incidentReportForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Incident Report',
-        formType: 'incidentReport',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/incidentReport/${form.id}`
+        type: "Incident Report",
+        formType: "incidentReport",
+        category: "General",
+        publicUrl: `/forms/${form.id}/incident-injury-report`,
       })),
-      ...dailyReportForms.map(form => ({
+      ...dailyReportForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Daily Report',
-        formType: 'dailyReport',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/dailyReport/${form.id}`
+        type: "Daily Report",
+        formType: "dailyReport",
+        category: "General",
+        publicUrl: `/forms/${form.id}/daily-report`, // Note: This route doesn't exist in your routes
       })),
-      
+
       // NEW GENERAL FORMS
-      ...psychosocialHazardForms.map(form => ({
+      ...psychosocialHazardForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Psychosocial Hazards',
-        formType: 'psychosocialHazard',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/psychosocialHazard/${form.id}`
+        type: "Psychosocial Hazards",
+        formType: "psychosocialHazard",
+        category: "General",
+        publicUrl: `/forms/${form.id}/report-psychosocial-hazards`,
       })),
-      ...companyInductionForms.map(form => ({
+      ...companyInductionForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Company Induction',
-        formType: 'companyInduction',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/companyInduction/${form.id}`
+        type: "Company Induction",
+        formType: "companyInduction",
+        category: "General",
+        publicUrl: `/forms/${form.id}/company-induction`, // Note: This route doesn't exist in your routes
       })),
-      ...preStartStaffForms.map(form => ({
+      ...preStartStaffForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Pre Start Staff',
-        formType: 'preStartStaff',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/preStartStaff/${form.id}`
+        type: "Pre Start Staff",
+        formType: "preStartStaff",
+        category: "General",
+        publicUrl: `/forms/${form.id}/pre-start-company-staff`,
       })),
-      ...dailyPreStartContractorForms.map(form => ({
+      ...dailyPreStartContractorForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Daily Pre Start Contractors',
-        formType: 'dailyPreStartContractor',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/dailyPreStartContractor/${form.id}`
+        type: "Daily Pre Start Contractors",
+        formType: "dailyPreStartContractor",
+        category: "General",
+        publicUrl: `/forms/${form.id}/pre-start-contractor`,
       })),
-      ...toolboxMeetingForms.map(form => ({
+      ...toolboxMeetingForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Toolbox Meeting',
-        formType: 'toolboxMeeting',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/toolboxMeeting/${form.id}`
+        type: "Toolbox Meeting",
+        formType: "toolboxMeeting",
+        category: "General",
+        publicUrl: `/forms/${form.id}/toolbox-meeting-checklist`,
       })),
-      ...hazardRiskAssessmentForms.map(form => ({
+      ...hazardRiskAssessmentForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Hazard Risk Assessment',
-        formType: 'hazardRiskAssessment',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/hazardRiskAssessment/${form.id}`
+        type: "Hazard Risk Assessment",
+        formType: "hazardRiskAssessment",
+        category: "General",
+        publicUrl: `/forms/${form.id}/hazard-risk-assessment`,
       })),
-      ...hazardReportForms.map(form => ({
+      ...hazardReportForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Hazard Report',
-        formType: 'hazardReport',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/hazardReport/${form.id}`
+        type: "Hazard Report",
+        formType: "hazardReport",
+        category: "General",
+        publicUrl: `/forms/${form.id}/hazard-report-form`,
       })),
-      ...swmsInspectionForms.map(form => ({
+      ...swmsInspectionForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'SWMS Inspection',
-        formType: 'swmsInspection',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/swmsInspection/${form.id}`
+        type: "SWMS Inspection",
+        formType: "swmsInspection",
+        category: "General",
+        publicUrl: `/forms/${form.id}/spot-swms-inspection`,
       })),
-      ...directorWorksiteChecklistForms.map(form => ({
+      ...directorWorksiteChecklistForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Director Worksite Checklist',
-        formType: 'directorWorksiteChecklist',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/directorWorksiteChecklist/${form.id}`
+        type: "Director Worksite Checklist",
+        formType: "directorWorksiteChecklist",
+        category: "General",
+        publicUrl: `/forms/${form.id}/director-worker-checklist`,
       })),
-      ...taskCardForms.map(form => ({
+      ...taskCardForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Task Card',
-        formType: 'taskCard',
-        category: 'General',
-        publicUrl: `/forms/${hash}/form/taskCard/${form.id}`
+        type: "Task Card",
+        formType: "taskCard",
+        category: "General",
+        publicUrl: `/forms/${form.id}/task-card`,
       })),
-      
+
       // NEW INSPECTION FORMS
-      ...vehicleInspectionForms.map(form => ({
+      ...vehicleInspectionForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Vehicle Inspection',
-        formType: 'vehicleInspection',
-        category: 'Inspection',
-        publicUrl: `/forms/${hash}/form/vehicleInspection/${form.id}`
+        type: "Vehicle Inspection",
+        formType: "vehicleInspection",
+        category: "Inspection",
+        publicUrl: `/forms/${form.id}/vehicle-inspection-checklist`,
       })),
-      ...ewpInspectionForms.map(form => ({
+      ...ewpInspectionForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'EWP Inspection',
-        formType: 'ewpInspection',
-        category: 'Inspection',
-        publicUrl: `/forms/${hash}/form/ewpInspection/${form.id}`
+        type: "EWP Inspection",
+        formType: "ewpInspection",
+        category: "Inspection",
+        publicUrl: `/forms/${form.id}/ewp-inspection`,
       })),
-      ...telehandlerInspectionForms.map(form => ({
+      ...telehandlerInspectionForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Telehandler Inspection',
-        formType: 'telehandlerInspection',
-        category: 'Inspection',
-        publicUrl: `/forms/${hash}/form/telehandlerInspection/${form.id}`
+        type: "Telehandler Inspection",
+        formType: "telehandlerInspection",
+        category: "Inspection",
+        publicUrl: `/forms/${form.id}/telehandler-daily-inspection-checklist`,
       })),
-      ...employeeChecklistForms.map(form => ({
+      ...employeeChecklistForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Employee Checklist',
-        formType: 'employeeChecklist',
-        category: 'Inspection',
-        publicUrl: `/forms/${hash}/form/employeeChecklist/${form.id}`
+        type: "Employee Checklist",
+        formType: "employeeChecklist",
+        category: "Inspection",
+        publicUrl: `/forms/${form.id}/employee-subcontractor-checklist`,
       })),
-      ...siteManagerInspectionForms.map(form => ({
+      ...siteManagerInspectionForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Site Manager Inspection',
-        formType: 'siteManagerInspection',
-        category: 'Inspection',
-        publicUrl: `/forms/${hash}/form/siteManagerInspection/${form.id}`
+        type: "Site Manager Inspection",
+        formType: "siteManagerInspection",
+        category: "Inspection",
+        publicUrl: `/forms/${form.id}/quick-site-manager-inspection`,
       })),
-      ...detailedInspectionReportForms.map(form => ({
+      ...detailedInspectionReportForms.map((form) => ({
         id: form.id,
         formName: form.formName,
         description: form.description,
-        type: 'Detailed Inspection Report',
-        formType: 'detailedInspectionReport',
-        category: 'Inspection',
-        publicUrl: `/forms/${hash}/form/detailedInspectionReport/${form.id}`
-      }))
+        type: "Detailed Inspection Report",
+        formType: "detailedInspectionReport",
+        category: "Inspection",
+        publicUrl: `/forms/${form.id}/detailed-inspection-report`, // Note: This route doesn't exist in your routes
+      })),
     ];
 
     res.json({
