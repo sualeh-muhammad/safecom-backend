@@ -356,6 +356,8 @@ model Company {
   phone                     String?
   website                   String?
   logoImageUrl              String?
+    isManuallyCreated    Boolean   @default(false)  // For super admin created companies
+  createdBySuperId     String?   // Reference to super admin who created it
   streetAddress             String?
   city                      String?
   state                     String?
@@ -446,7 +448,7 @@ model JobSite {
 
 model User {
   id                        String                     @id @default(cuid())
-  companyId                 String
+  companyId                 String?
   jobSiteId                 String?
   auth0UserId               String?                    @unique
   email                     String                     @unique
@@ -493,7 +495,7 @@ model User {
   siteManagerInspectionSubmissions  SiteManagerInspectionSubmission[]
   detailedInspectionReportSubmissions DetailedInspectionReportSubmission[]
   
-  company                   Company                    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company                   Company?                    @relation(fields: [companyId], references: [id], onDelete: Cascade)
   jobSite                   JobSite?                   @relation(fields: [jobSiteId], references: [id])
 
   @@map("users")
@@ -1132,8 +1134,9 @@ model PaymentHistory {
 
 model SuperAdmin {
   id                 String    @id @default(cuid())
-  auth0UserId        String    @unique
+  auth0UserId        String?    @unique
   email              String    @unique
+  password           String
   firstName          String
   lastName           String
   role               String    @default("SUPER_ADMIN")
@@ -1142,6 +1145,7 @@ model SuperAdmin {
   canAccessReports   Boolean   @default(true)
   isActive           Boolean   @default(true)
   lastLoginAt        DateTime?
+  loginCount         Int       @default(0)    // ADD THIS FIELD
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 

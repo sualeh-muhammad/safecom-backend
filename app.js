@@ -16,6 +16,9 @@ const submissionRoutes = require('./src/routes/submissions')
 const adminCompanyRoutes = require('./src/routes/adminCompany');
 const publicFormsRoutes = require('./src/routes/publicForms');
 const { createHash, verifyHash, generatePublicUrl } = require('./src/utils/hashUtils');
+// const superAdminRoutes = require('./src/routes/superAdmin');
+const superAdminRoutes = require('./src/routes/superAdminCompany');
+
 
 const app = express();
 
@@ -116,7 +119,7 @@ app.use('/api/admin-companies' , adminCompanyRoutes)
 app.use('/api/public-forms' , publicFormsRoutes)
 
 
-
+app.use('/api/super-admin', superAdminRoutes);
 
 
 

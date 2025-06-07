@@ -1559,201 +1559,201 @@ router.get('/public/:subdomain/forms', async (req, res) => {
 
 
 
-async function initializeCompanyForms(companyId) {
-  try {
-    // Check if forms already exist
-    const existingForms = await prisma.siteSignInForm.findFirst({
-      where: { companyId }
-    });
+// async function initializeCompanyForms(companyId) {
+//   try {
+//     // Check if forms already exist
+//     const existingForms = await prisma.siteSignInForm.findFirst({
+//       where: { companyId }
+//     });
 
-    if (existingForms) {
-      console.log(`✅ Forms already exist for company: ${companyId}`);
-      return;
-    }
+//     if (existingForms) {
+//       console.log(`✅ Forms already exist for company: ${companyId}`);
+//       return;
+//     }
 
-    // Create all default forms for the company (all ACTIVE by default)
-    await Promise.all([
-      // EXISTING FORMS
-      prisma.siteSignInForm.create({
-        data: {
-          companyId,
-          formName: 'Site Sign-In',
-          description: 'Daily worker sign-in form with time tracking',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.siteInductionForm.create({
-        data: {
-          companyId,
-          formName: 'Site Induction',
-          description: 'New worker safety induction and orientation',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.safetyCheckForm.create({
-        data: {
-          companyId,
-          formName: 'Safety Check',
-          description: 'Daily site safety compliance checklist',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.incidentReportForm.create({
-        data: {
-          companyId,
-          formName: 'Incident Report',
-          description: 'Workplace incident or near-miss reporting',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.dailyReportForm.create({
-        data: {
-          companyId,
-          formName: 'Daily Report',
-          description: 'End of day project status and progress report',
-          status: 'ACTIVE'
-        }
-      }),
+//     // Create all default forms for the company (all ACTIVE by default)
+//     await Promise.all([
+//       // EXISTING FORMS
+//       prisma.siteSignInForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Site Sign-In',
+//           description: 'Daily worker sign-in form with time tracking',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.siteInductionForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Site Induction',
+//           description: 'New worker safety induction and orientation',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.safetyCheckForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Safety Check',
+//           description: 'Daily site safety compliance checklist',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.incidentReportForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Incident Report',
+//           description: 'Workplace incident or near-miss reporting',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.dailyReportForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Daily Report',
+//           description: 'End of day project status and progress report',
+//           status: 'ACTIVE'
+//         }
+//       }),
 
-      // NEW GENERAL FORMS
-      prisma.psychosocialHazardForm.create({
-        data: {
-          companyId,
-          formName: 'Report Psychosocial Hazards',
-          description: 'Documentation of workplace psychosocial hazards',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.companyInductionForm.create({
-        data: {
-          companyId,
-          formName: 'Company Induction',
-          description: 'Mandatory induction checklist for new workers',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.preStartStaffForm.create({
-        data: {
-          companyId,
-          formName: 'Pre Start Staff',
-          description: 'Pre-work checklist for staff',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.dailyPreStartContractorForm.create({
-        data: {
-          companyId,
-          formName: 'Daily Pre Start Contractors',
-          description: 'Daily pre-work checklist for contractors',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.toolboxMeetingForm.create({
-        data: {
-          companyId,
-          formName: 'Toolbox Meeting',
-          description: 'Safety meeting documentation',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.hazardRiskAssessmentForm.create({
-        data: {
-          companyId,
-          formName: 'Hazard Risk Assessment Form',
-          description: 'Form to assess potential hazards on site',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.hazardReportForm.create({
-        data: {
-          companyId,
-          formName: 'Hazard Report Form',
-          description: 'Form to report hazards on site',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.swmsInspectionForm.create({
-        data: {
-          companyId,
-          formName: 'Spot & SWMS Inspection Checklist',
-          description: 'Checklist for safety inspections and SWMS compliance',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.directorWorksiteChecklistForm.create({
-        data: {
-          companyId,
-          formName: 'Director Worksite Checklist',
-          description: 'Checklist for management review of worksite conditions',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.taskCardForm.create({
-        data: {
-          companyId,
-          formName: 'Task Card',
-          description: 'Task card for management',
-          status: 'ACTIVE'
-        }
-      }),
+//       // NEW GENERAL FORMS
+//       prisma.psychosocialHazardForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Report Psychosocial Hazards',
+//           description: 'Documentation of workplace psychosocial hazards',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.companyInductionForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Company Induction',
+//           description: 'Mandatory induction checklist for new workers',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.preStartStaffForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Pre Start Staff',
+//           description: 'Pre-work checklist for staff',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.dailyPreStartContractorForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Daily Pre Start Contractors',
+//           description: 'Daily pre-work checklist for contractors',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.toolboxMeetingForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Toolbox Meeting',
+//           description: 'Safety meeting documentation',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.hazardRiskAssessmentForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Hazard Risk Assessment Form',
+//           description: 'Form to assess potential hazards on site',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.hazardReportForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Hazard Report Form',
+//           description: 'Form to report hazards on site',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.swmsInspectionForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Spot & SWMS Inspection Checklist',
+//           description: 'Checklist for safety inspections and SWMS compliance',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.directorWorksiteChecklistForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Director Worksite Checklist',
+//           description: 'Checklist for management review of worksite conditions',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.taskCardForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Task Card',
+//           description: 'Task card for management',
+//           status: 'ACTIVE'
+//         }
+//       }),
 
-      // NEW INSPECTION FORMS
-      prisma.vehicleInspectionForm.create({
-        data: {
-          companyId,
-          formName: 'Vehicle Inspection',
-          description: 'Regular vehicle safety inspection form',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.ewpInspectionForm.create({
-        data: {
-          companyId,
-          formName: 'EWP Inspection',
-          description: 'Elevated Work Platform inspection checklist',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.telehandlerInspectionForm.create({
-        data: {
-          companyId,
-          formName: 'Telehandler Daily Inspection Checklist',
-          description: 'Daily inspection for telehandler equipment',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.employeeChecklistForm.create({
-        data: {
-          companyId,
-          formName: 'Employee / Subcontractor Checklist',
-          description: 'Verification checklist for workers',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.siteManagerInspectionForm.create({
-        data: {
-          companyId,
-          formName: 'Quick Site Manager Daily Workplace Inspection',
-          description: 'Daily site inspection checklist',
-          status: 'ACTIVE'
-        }
-      }),
-      prisma.detailedInspectionReportForm.create({
-        data: {
-          companyId,
-          formName: 'SAFECOM HSEQ Advisor Detailed Inspection Report',
-          description: 'Comprehensive site inspection report',
-          status: 'ACTIVE'
-        }
-      })
-    ]);
+//       // NEW INSPECTION FORMS
+//       prisma.vehicleInspectionForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Vehicle Inspection',
+//           description: 'Regular vehicle safety inspection form',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.ewpInspectionForm.create({
+//         data: {
+//           companyId,
+//           formName: 'EWP Inspection',
+//           description: 'Elevated Work Platform inspection checklist',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.telehandlerInspectionForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Telehandler Daily Inspection Checklist',
+//           description: 'Daily inspection for telehandler equipment',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.employeeChecklistForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Employee / Subcontractor Checklist',
+//           description: 'Verification checklist for workers',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.siteManagerInspectionForm.create({
+//         data: {
+//           companyId,
+//           formName: 'Quick Site Manager Daily Workplace Inspection',
+//           description: 'Daily site inspection checklist',
+//           status: 'ACTIVE'
+//         }
+//       }),
+//       prisma.detailedInspectionReportForm.create({
+//         data: {
+//           companyId,
+//           formName: 'SAFECOM HSEQ Advisor Detailed Inspection Report',
+//           description: 'Comprehensive site inspection report',
+//           status: 'ACTIVE'
+//         }
+//       })
+//     ]);
 
-    console.log(`✅ All 21 default forms created for company: ${companyId}`);
-  } catch (error) {
-    console.error('❌ Error initializing company forms:', error);
-    throw error;
-  }
-}
+//     console.log(`✅ All 21 default forms created for company: ${companyId}`);
+//   } catch (error) {
+//     console.error('❌ Error initializing company forms:', error);
+//     throw error;
+//   }
+// }
 
 router.post('/initialize-forms', async (req, res) => {
   const { companyId } = req.body;
@@ -1967,6 +1967,236 @@ router.post('/initialize-forms', async (req, res) => {
     });
   }
 });
+
+// routes/forms.js - Enhanced initializeCompanyForms function
+
+// Add this enhanced function to your existing forms.js file
+
+/**
+ * Initialize all company forms with selective activation
+ * @param {string} companyId - The company ID
+ * @param {string[]} selectedForms - Array of form keys to activate (rest will be INACTIVE)
+ */
+async function initializeCompanyForms(companyId, selectedForms = []) {
+  try {
+    console.log(`🎯 Initializing forms for company: ${companyId}`);
+    console.log(`📋 Selected forms: ${selectedForms.join(', ')}`);
+
+    // Check if forms already exist
+    const existingForms = await prisma.siteSignInForm.findFirst({
+      where: { companyId }
+    });
+
+    if (existingForms) {
+      console.log(`✅ Forms already exist for company: ${companyId}`);
+      return;
+    }
+
+    // Helper function to determine form status
+    const getFormStatus = (formKey) => selectedForms.includes(formKey) ? 'ACTIVE' : 'INACTIVE';
+
+    // Create all forms with appropriate status
+    await Promise.all([
+      // ========== EXISTING FORMS (5) ==========
+      prisma.siteSignInForm.create({
+        data: {
+          companyId,
+          formName: 'Site Sign-In',
+          description: 'Daily worker sign-in form with time tracking',
+          status: getFormStatus('siteSignIn')
+        }
+      }),
+      prisma.siteInductionForm.create({
+        data: {
+          companyId,
+          formName: 'Site Induction',
+          description: 'New worker safety induction and orientation',
+          status: getFormStatus('siteInduction')
+        }
+      }),
+      prisma.safetyCheckForm.create({
+        data: {
+          companyId,
+          formName: 'Safety Check',
+          description: 'Daily site safety compliance checklist',
+          status: getFormStatus('safetyCheck')
+        }
+      }),
+      prisma.incidentReportForm.create({
+        data: {
+          companyId,
+          formName: 'Incident Report',
+          description: 'Workplace incident or near-miss reporting',
+          status: getFormStatus('incidentReport')
+        }
+      }),
+      prisma.dailyReportForm.create({
+        data: {
+          companyId,
+          formName: 'Daily Report',
+          description: 'End of day project status and progress report',
+          status: getFormStatus('dailyReport')
+        }
+      }),
+
+      // ========== NEW GENERAL FORMS (10) ==========
+      prisma.psychosocialHazardForm.create({
+        data: {
+          companyId,
+          formName: 'Report Psychosocial Hazards',
+          description: 'Documentation of workplace psychosocial hazards',
+          status: getFormStatus('psychosocialHazard')
+        }
+      }),
+      prisma.companyInductionForm.create({
+        data: {
+          companyId,
+          formName: 'Company Induction',
+          description: 'Mandatory induction checklist for new workers',
+          status: getFormStatus('companyInduction')
+        }
+      }),
+      prisma.preStartStaffForm.create({
+        data: {
+          companyId,
+          formName: 'Pre Start Staff',
+          description: 'Pre-work checklist for staff',
+          status: getFormStatus('preStartStaff')
+        }
+      }),
+      prisma.dailyPreStartContractorForm.create({
+        data: {
+          companyId,
+          formName: 'Daily Pre Start Contractors',
+          description: 'Daily pre-work checklist for contractors',
+          status: getFormStatus('dailyPreStartContractor')
+        }
+      }),
+      prisma.toolboxMeetingForm.create({
+        data: {
+          companyId,
+          formName: 'Toolbox Meeting',
+          description: 'Safety meeting documentation',
+          status: getFormStatus('toolboxMeeting')
+        }
+      }),
+      prisma.hazardRiskAssessmentForm.create({
+        data: {
+          companyId,
+          formName: 'Hazard Risk Assessment Form',
+          description: 'Form to assess potential hazards on site',
+          status: getFormStatus('hazardRiskAssessment')
+        }
+      }),
+      prisma.hazardReportForm.create({
+        data: {
+          companyId,
+          formName: 'Hazard Report Form',
+          description: 'Form to report hazards on site',
+          status: getFormStatus('hazardReport')
+        }
+      }),
+      prisma.swmsInspectionForm.create({
+        data: {
+          companyId,
+          formName: 'Spot & SWMS Inspection Checklist',
+          description: 'Checklist for safety inspections and SWMS compliance',
+          status: getFormStatus('swmsInspection')
+        }
+      }),
+      prisma.directorWorksiteChecklistForm.create({
+        data: {
+          companyId,
+          formName: 'Director Worksite Checklist',
+          description: 'Checklist for management review of worksite conditions',
+          status: getFormStatus('directorWorksiteChecklist')
+        }
+      }),
+      prisma.taskCardForm.create({
+        data: {
+          companyId,
+          formName: 'Task Card',
+          description: 'Task card for management',
+          status: getFormStatus('taskCard')
+        }
+      }),
+
+      // ========== NEW INSPECTION FORMS (6) ==========
+      prisma.vehicleInspectionForm.create({
+        data: {
+          companyId,
+          formName: 'Vehicle Inspection',
+          description: 'Regular vehicle safety inspection form',
+          status: getFormStatus('vehicleInspection')
+        }
+      }),
+      prisma.ewpInspectionForm.create({
+        data: {
+          companyId,
+          formName: 'EWP Inspection',
+          description: 'Elevated Work Platform inspection checklist',
+          status: getFormStatus('ewpInspection')
+        }
+      }),
+      prisma.telehandlerInspectionForm.create({
+        data: {
+          companyId,
+          formName: 'Telehandler Daily Inspection Checklist',
+          description: 'Daily inspection for telehandler equipment',
+          status: getFormStatus('telehandlerInspection')
+        }
+      }),
+      prisma.employeeChecklistForm.create({
+        data: {
+          companyId,
+          formName: 'Employee / Subcontractor Checklist',
+          description: 'Verification checklist for workers',
+          status: getFormStatus('employeeChecklist')
+        }
+      }),
+      prisma.siteManagerInspectionForm.create({
+        data: {
+          companyId,
+          formName: 'Quick Site Manager Daily Workplace Inspection',
+          description: 'Daily site inspection checklist',
+          status: getFormStatus('siteManagerInspection')
+        }
+      }),
+      prisma.detailedInspectionReportForm.create({
+        data: {
+          companyId,
+          formName: 'SAFECOM HSEQ Advisor Detailed Inspection Report',
+          description: 'Comprehensive site inspection report',
+          status: getFormStatus('detailedInspectionReport')
+        }
+      })
+    ]);
+
+    // Count active and inactive forms
+    const activeCount = selectedForms.length;
+    const inactiveCount = 21 - activeCount; // Total 21 forms
+
+    console.log(`✅ All 21 forms created for company: ${companyId}`);
+    console.log(`📊 Forms Summary: ${activeCount} ACTIVE, ${inactiveCount} INACTIVE`);
+    console.log(`🎯 Active Forms: ${selectedForms.join(', ')}`);
+
+    return {
+      total: 21,
+      active: activeCount,
+      inactive: inactiveCount,
+      breakdown: {
+        existingForms: 5,
+        newGeneralForms: 10,
+        newInspectionForms: 6
+      }
+    };
+  } catch (error) {
+    console.error('❌ Error initializing company forms:', error);
+    throw error;
+  }
+}
+
+// Export the enhanced function
 
 module.exports = router;
 
