@@ -423,10 +423,10 @@ router.get('/available-forms', async (req, res) => {
     const availableForms = [
       // EXISTING FORMS
       { key: 'siteSignIn', name: 'Site Sign-In', description: 'Daily worker sign-in form with time tracking', category: 'General' },
-      { key: 'siteInduction', name: 'Site Induction', description: 'New worker safety induction and orientation', category: 'General' },
-      { key: 'safetyCheck', name: 'Safety Check', description: 'Daily site safety compliance checklist', category: 'General' },
+      // { key: 'siteInduction', name: 'Site Induction', description: 'New worker safety induction and orientation', category: 'General' },
+      // { key: 'safetyCheck', name: 'Safety Check', description: 'Daily site safety compliance checklist', category: 'General' },
       { key: 'incidentReport', name: 'Incident Report', description: 'Workplace incident or near-miss reporting', category: 'General' },
-      { key: 'dailyReport', name: 'Daily Report', description: 'End of day project status and progress report', category: 'General' },
+      // { key: 'dailyReport', name: 'Daily Report', description: 'End of day project status and progress report', category: 'General' },
       
       // NEW GENERAL FORMS
       { key: 'psychosocialHazard', name: 'Psychosocial Hazards', description: 'Documentation of workplace psychosocial hazards', category: 'General' },
@@ -675,6 +675,64 @@ router.post('/companies', upload.single('logo'), async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to create company'
+    });
+  }
+});
+
+// PATCH /api/super-admin/companies/:id/status - Toggle company status
+router.patch('/companies/:id/status', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isActive } = req.body;
+
+    console.log(`🔄 Toggling company status - ID: ${id}, New Status: ${isActive}`);
+
+    // Validate the isActive parameter
+    if (typeof isActive !== 'boolean') {
+      return res.status(400).json({
+        success: false,
+        message: 'isActive must be a boolean value'
+      });
+    }
+
+    // Check if company exists
+    const existingCompany = await prisma.company.findUnique({
+      where: { id },
+      select: { id: true, name: true, isActive: true }
+    });
+
+    if (!existingCompany) {
+      return res.status(404).json({
+        success: false,
+        message: 'Company not found'
+      });
+    }
+
+    // Update company status
+    const updatedCompany = await prisma.company.update({
+      where: { id },
+      data: { isActive },
+      select: {
+        id: true,
+        name: true,
+        isActive: true,
+        updatedAt: true
+      }
+    });
+
+    console.log(`✅ Company status updated: ${updatedCompany.name} - ${isActive ? 'ACTIVE' : 'INACTIVE'}`);
+
+    res.json({
+      success: true,
+      message: `Company ${isActive ? 'activated' : 'deactivated'} successfully`,
+      data: updatedCompany
+    });
+
+  } catch (error) {
+    console.error('❌ Error updating company status:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update company status'
     });
   }
 });

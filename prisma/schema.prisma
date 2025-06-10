@@ -1,342 +1,3 @@
-// generator client {
-//   provider = "prisma-client-js"
-// }
-
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
-
-// model Company {
-//   id                        String                     @id @default(cuid())
-//   name                      String
-//   subdomain                 String                     @unique
-//   email                     String                     @unique
-//   phone                     String?
-//   website                   String?
-//   logoImageUrl              String?
-//   streetAddress             String?
-//   city                      String?
-//   state                     String?
-//   zipCode                   String?
-//   country                   String                     @default("USA")
-//   stripeCustomerId          String?                    @unique
-//   subscriptionId            String?                    @unique
-//   currentPlan               Plan                       @default(TRIAL)
-//   subscriptionStatus        SubscriptionStatus         @default(TRIAL)
-//   nextBillingDate           DateTime?
-//   totalSpent                Float                      @default(0)
-//   isActive                  Boolean                    @default(true)
-//   createdAt                 DateTime                   @default(now())
-//   updatedAt                 DateTime                   @updatedAt
-//   dailyReportForms          DailyReportForm[]
-//   dailyReportSubmissions    DailyReportSubmission[]
-//   incidentReportForms       IncidentReportForm[]
-//   incidentReportSubmissions IncidentReportSubmission[]
-//   jobSites                  JobSite[]
-//   paymentHistory            PaymentHistory[]
-//   safetyCheckForms          SafetyCheckForm[]
-//   safetyCheckSubmissions    SafetyCheckSubmission[]
-//   siteInductionForms        SiteInductionForm[]
-//   siteInductionSubmissions  SiteInductionSubmission[]
-//   siteSignInForms           SiteSignInForm[]
-//   siteSignInSubmissions     SiteSignInSubmission[]
-//   users                     User[]
-
-//   @@map("companies")
-// }
-
-// model JobSite {
-//   id            String   @id @default(cuid())
-//   companyId     String
-//   jobsiteName   String
-//   streetAddress String?
-//   city          String?
-//   state         String?
-//   zipCode       String?
-//   country       String?
-//   isActive      Boolean  @default(true)
-//   createdAt     DateTime @default(now())
-//   updatedAt     DateTime @updatedAt
-//   company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   users         User[]
-
-//   @@map("job_sites")
-// }
-
-// model User {
-//   id                        String                     @id @default(cuid())
-//   companyId                 String
-//   jobSiteId                 String?
-//   auth0UserId               String?                    @unique
-//   email                     String                     @unique
-//   firstName                 String
-//   lastName                  String
-//   password                  String?
-//   phone                     String?
-//   profilePicture            String?
-//   role                      UserRole                   @default(ADMIN)
-//   status                    UserStatus                 @default(ACTIVE)
-
-
-//   loginCount                Int                        @default(0)
-//   canManageCompanies        Boolean                    @default(false)
-//   canViewPayments           Boolean                    @default(false)  
-//   canAccessReports          Boolean                    @default(false)
-//   isEmailVerified           Boolean                    @default(false)
-
-//   lastLoginAt               DateTime?
-//   createdAt                 DateTime                   @default(now())
-//   updatedAt                 DateTime                   @updatedAt
-//   dailyReportSubmissions    DailyReportSubmission[]
-//   incidentReportSubmissions IncidentReportSubmission[]
-//   safetyCheckSubmissions    SafetyCheckSubmission[]
-//   siteInductionSubmissions  SiteInductionSubmission[]
-//   siteSignInSubmissions     SiteSignInSubmission[]
-//   company                   Company                    @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   jobSite                   JobSite?                   @relation(fields: [jobSiteId], references: [id])
-
-//   @@map("users")
-// }
-
-// model SiteSignInForm {
-//   id              String                 @id @default(cuid())
-//   companyId       String
-//   formName        String                 @default("Site Sign-In")
-//   description     String                 @default("Daily worker sign-in form with time tracking")
-//   status          FormStatus             @default(ACTIVE)
-//   submissionCount Int                    @default(0)
-//   createdAt       DateTime               @default(now())
-//   updatedAt       DateTime               @updatedAt
-//   company         Company                @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   submissions     SiteSignInSubmission[]
-
-//   @@map("site_sign_in_forms")
-// }
-
-// model SiteSignInSubmission {
-//   id          String         @id @default(cuid())
-//   companyId   String
-//   formId      String
-//   userId      String
-//   jobSiteId   String?
-//   submittedAt DateTime       @default(now())
-//   company     Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   form        SiteSignInForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-//   user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-//   @@map("site_sign_in_submissions")
-// }
-
-// model SiteInductionForm {
-//   id              String                    @id @default(cuid())
-//   companyId       String
-//   formName        String                    @default("Site Induction")
-//   description     String                    @default("New worker safety induction and orientation")
-//   status          FormStatus                @default(ACTIVE)
-//   submissionCount Int                       @default(0)
-//   createdAt       DateTime                  @default(now())
-//   updatedAt       DateTime                  @updatedAt
-//   company         Company                   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   submissions     SiteInductionSubmission[]
-
-//   @@map("site_induction_forms")
-// }
-
-// model SiteInductionSubmission {
-//   id          String            @id @default(cuid())
-//   companyId   String
-//   formId      String
-//   userId      String
-//   jobSiteId   String?
-//   submittedAt DateTime          @default(now())
-//   company     Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   form        SiteInductionForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-//   user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-//   @@map("site_induction_submissions")
-// }
-
-// model SafetyCheckForm {
-//   id              String                  @id @default(cuid())
-//   companyId       String
-//   formName        String                  @default("Safety Check")
-//   description     String                  @default("Daily site safety compliance checklist")
-//   status          FormStatus              @default(ACTIVE)
-//   submissionCount Int                     @default(0)
-//   createdAt       DateTime                @default(now())
-//   updatedAt       DateTime                @updatedAt
-//   company         Company                 @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   submissions     SafetyCheckSubmission[]
-
-//   @@map("safety_check_forms")
-// }
-
-// model SafetyCheckSubmission {
-//   id          String          @id @default(cuid())
-//   companyId   String
-//   formId      String
-//   userId      String
-//   jobSiteId   String?
-//   submittedAt DateTime        @default(now())
-//   company     Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   form        SafetyCheckForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-//   user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-//   @@map("safety_check_submissions")
-// }
-
-// // model IncidentReportForm {
-// //   id              String                     @id @default(cuid())
-// //   companyId       String
-// //   formName        String                     @default("Incident Report")
-// //   description     String                     @default("Workplace incident or near-miss reporting")
-// //   status          FormStatus                 @default(ACTIVE)
-// //   submissionCount Int                        @default(0)
-// //   createdAt       DateTime                   @default(now())
-// //   updatedAt       DateTime                   @updatedAt
-// //   company         Company                    @relation(fields: [companyId], references: [id], onDelete: Cascade)
-// //   submissions     IncidentReportSubmission[]
-
-// //   @@map("incident_report_forms")
-// // }
-
-// // model IncidentReportSubmission {
-// //   id          String             @id @default(cuid())
-// //   companyId   String
-// //   formId      String
-// //   userId      String
-// //   jobSiteId   String?
-// //   submittedAt DateTime           @default(now())
-// //   company     Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
-// //   form        IncidentReportForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-// //   user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-// //   @@map("incident_report_submissions")
-// // }
-
-// model DailyReportForm {
-//   id              String                  @id @default(cuid())
-//   companyId       String
-//   formName        String                  @default("Daily Report")
-//   description     String                  @default("End of day project status and progress report")
-//   status          FormStatus              @default(ACTIVE)
-//   submissionCount Int                     @default(0)
-//   createdAt       DateTime                @default(now())
-//   updatedAt       DateTime                @updatedAt
-//   company         Company                 @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   submissions     DailyReportSubmission[]
-
-//   @@map("daily_report_forms")
-// }
-
-// model DailyReportSubmission {
-//   id          String          @id @default(cuid())
-//   companyId   String
-//   formId      String
-//   userId      String
-//   jobSiteId   String?
-//   submittedAt DateTime        @default(now())
-//   company     Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
-//   form        DailyReportForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-//   user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-//   @@map("daily_report_submissions")
-// }
-
-// model PaymentHistory {
-//   id              String        @id @default(cuid())
-//   companyId       String
-//   transactionId   String        @unique
-//   stripePaymentId       String?  // Keep this for backward compatibility
-//   stripeInvoiceId       String?  // NEW: Specific field for invoice IDs
-//   stripePaymentIntentId String?  // NEW: Specific field for payment intent IDs
-//   date            DateTime      @default(now())
-//   plan            Plan
-//   amount          Float
-//   paymentMethod   String
-//   status          PaymentStatus @default(COMPLETED)
-//   billingPeriod   BillingPeriod @default(MONTHLY)
-//   company         Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-//   @@map("payment_history")
-// }
-
-// model SuperAdmin {
-//   id                 String    @id @default(cuid())
-//   auth0UserId        String    @unique
-//   email              String    @unique
-//   firstName          String
-//   lastName           String
-//   role               String    @default("SUPER_ADMIN")
-//   canManageCompanies Boolean   @default(true)
-//   canViewPayments    Boolean   @default(true)
-//   canAccessReports   Boolean   @default(true)
-//   isActive           Boolean   @default(true)
-//   lastLoginAt        DateTime?
-//   createdAt          DateTime  @default(now())
-//   updatedAt          DateTime  @updatedAt
-
-//   @@map("super_admins")
-// }
-
-// model SystemSettings {
-//   id          String   @id @default(cuid())
-//   key         String   @unique
-//   value       String
-//   description String?
-//   updatedBy   String?
-//   updatedAt   DateTime @updatedAt
-
-//   @@map("system_settings")
-// }
-
-// enum Plan {
-//   TRIAL
-//   BASIC
-//   PRO
-//   ENTERPRISE
-// }
-
-// enum SubscriptionStatus {
-//   TRIAL
-//   ACTIVE
-//   PAST_DUE
-//   CANCELLED
-//   SUSPENDED
-//   PENDING_PAYMENT  // Make sure this exists
-// }
-
-// enum PaymentStatus {
-//   PENDING
-//   COMPLETED
-//   FAILED
-//   REFUNDED
-// }
-
-// enum BillingPeriod {
-//   MONTHLY
-//   YEARLY
-// }
-
-// enum FormStatus {
-//   ACTIVE
-//   INACTIVE
-//   DRAFT
-// }
-
-// enum UserRole {
-//   SUPER_ADMIN
-//   ADMIN
-//   MANAGER
-//   WORKER
-// }
-
-// enum UserStatus {
-//   ACTIVE
-//   INACTIVE
-//   SUSPENDED
-// }
 
 
 generator client {
@@ -372,6 +33,9 @@ model Company {
   isActive                  Boolean                    @default(true)
   createdAt                 DateTime                   @default(now())
   updatedAt                 DateTime                   @updatedAt
+ chatSessions    ChatSession[]
+  companyState    String?       // Add company's primary state
+
   
   // Existing forms
   dailyReportForms          DailyReportForm[]
@@ -443,9 +107,13 @@ model JobSite {
   company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   users         User[]
 
+  // Add ALL submission relations that have jobSiteId
+  preStartStaffSubmissions          PreStartStaffSubmission[]
+  ewpInspectionSubmissions          EwpInspectionSubmission[]
+  vehicleInspectionSubmissions      VehicleInspectionSubmission[]
+  siteManagerInspectionSubmissions  SiteManagerInspectionSubmission[]
   @@map("job_sites")
 }
-
 model User {
   id                        String                     @id @default(cuid())
   companyId                 String?
@@ -467,6 +135,8 @@ model User {
   lastLoginAt               DateTime?
   createdAt                 DateTime                   @default(now())
   updatedAt                 DateTime                   @updatedAt
+  chatSessions    ChatSession[]
+
   
   // Existing submissions
   dailyReportSubmissions    DailyReportSubmission[]
@@ -517,18 +187,55 @@ model SiteSignInForm {
   @@map("site_sign_in_forms")
 }
 
+// Enhanced SiteSignInSubmission model for detailed form data
 model SiteSignInSubmission {
-  id          String         @id @default(cuid())
-  companyId   String
-  formId      String
-  userId      String
-  jobSiteId   String?
-  submittedAt DateTime       @default(now())
-  company     Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  form        SiteSignInForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id                      String                @id @default(cuid())
+  companyId               String
+  formId                  String
+  userId                  String
+  jobSiteId               String?
+  
+  // Basic Information
+  workerName              String
+  signInTime              DateTime              @default(now())
+  signOutTime             DateTime?
+  totalHours              Float?
+  expectedHours           Float?
+  emergencyContactNumber  String
+  
+  // Health & Safety
+  healthStatus            HealthStatus          @default(FIT)
+  
+  // PPE Compliance (stored as JSON)
+  ppeCompliance           Json                  // Stores checkbox selections
+  
+  // Additional Information
+  comments                String?
+  status                  SignInStatus          @default(ACTIVE)
+  
+  // Metadata
+  submittedAt             DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  
+  // Relations
+  company                 Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  form                    SiteSignInForm        @relation(fields: [formId], references: [id], onDelete: Cascade)
+  user                    User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   @@map("site_sign_in_submissions")
+}
+
+// Enums for the form
+enum HealthStatus {
+  FIT
+  UNFIT
+  CONCERNS
+}
+
+enum SignInStatus {
+  ACTIVE          // Currently signed in
+  COMPLETED       // Signed out
+  EMERGENCY_OUT   // Emergency sign out
 }
 
 model SiteInductionForm {
@@ -605,16 +312,68 @@ model IncidentReportForm {
 }
 
 model IncidentReportSubmission {
-  id          String             @id @default(cuid())
-  companyId   String
-  formId      String
-  userId      String
-  jobSiteId   String?
-  submittedAt DateTime           @default(now())
-  company     Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  form        IncidentReportForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id                      String                    @id @default(cuid())
+  companyId               String
+  formId                  String
+  userId                  String?
+  jobSiteId               String?
+  
+  // Step 1: Injured Person Details
+  firstName               String
+  lastName                String
+  dob                     DateTime
+  streetAddress           String
+  suburb                  String?
+  state                   String?
+  postCode                String?
+  mobile                  String
+  businessName            String
+  statusOfInjuredParty    StatusOfInjuredParty
+  
+  // Step 2: Incident Details
+  incidentDate            DateTime
+  incidentTime            String
+  incidentTimeAmPm        String                    @default("AM")
+  incidentLocation        String
+  ceasedWork              YesNoAnswer
+  
+  // Injury Details
+  injurySustained         YesNoAnswer
+  injuryType              String?
+  bodyPartInjured         String?
+  causeOfInjury           String?
+  treatmentByFirstAid     YesNoAnswer?
+  treatmentGiven          YesNoAnswer?
+  witnessName             String?
+  witnessContact          String?
+  
+  // Step 3: Treatment Details
+  medicalCentreAttended   YesNoAnswer?
+  medicalCenterName       String?
+  dateAttended            DateTime?
+  medicalCertificate      YesNoAnswer?
+  treatment               String?
+  referralIssued          YesNoAnswer?
+  injuryManagement        YesNoAnswer?
+  
+  // Person completing form
+  reporterFirstName       String
+  reporterLastName        String
+  signature               String?                   // Base64 signature data
+  date                    DateTime
+  
+  // Status tracking
+  status                  IncidentReportStatus      @default(PENDING)
+  
+  // Metadata
+  submittedAt             DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  
+  // Relations
+  company                 Company                   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  form                    IncidentReportForm        @relation(fields: [formId], references: [id], onDelete: Cascade)
+  user                    User?                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   @@map("incident_report_submissions")
 }
 
@@ -667,12 +426,15 @@ model PsychosocialHazardSubmission {
   id          String                  @id @default(cuid())
   companyId   String
   formId      String
-  userId      String
+  userId      String?
+  firstName   String
+  lastName    String
+  description String  
   jobSiteId   String?
   submittedAt DateTime                @default(now())
   company     Company                 @relation(fields: [companyId], references: [id], onDelete: Cascade)
   form        PsychosocialHazardForm  @relation(fields: [formId], references: [id], onDelete: Cascade)
-  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User?                    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("psychosocial_hazard_submissions")
 }
@@ -721,16 +483,49 @@ model PreStartStaffForm {
   @@map("pre_start_staff_forms")
 }
 
+// Enhanced PreStartStaffSubmission model
 model PreStartStaffSubmission {
   id          String            @id @default(cuid())
   companyId   String
   formId      String
-  userId      String
+  userId      String?           // Can be null for public submissions
   jobSiteId   String?
-  submittedAt DateTime          @default(now())
-  company     Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  form        PreStartStaffForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Basic Information
+  projectName       String?
+  date              DateTime      @default(now())
+  time              String?
+  timePeriod        String?       // AM/PM
+  briefingBy        String?
+  locationOfWorks   String?
+  supervisorForeman String?
+  
+  // Work Activities (stored as JSON for flexibility)
+  workActivities    Json?         // Array of {jobActivity, location, notes}
+  otherActivities   Json?         // Array of notes
+  
+  // Safety and Environmental Checklists
+  safetyChecklist         Json?   // Object with checked items
+  environmentalChecklist  Json?   // Object with checked items
+  riskManagementChecklist Json?   // Object with checked items
+  
+  // Risk Management
+  riskManagementDescription String?
+  riskManagementNotes       Json?   // Array of notes
+  
+  // Additional Information
+  additionalNotes Json?             // Array of additional notes
+  actionedBy      String?
+  
+  // Metadata
+  submittedAt DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  
+  // Relations
+  company     Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  form        PreStartStaffForm     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  user        User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobSite     JobSite?              @relation(fields: [jobSiteId], references: [id])
 
   @@map("pre_start_staff_submissions")
 }
@@ -837,17 +632,42 @@ model HazardReportForm {
   @@map("hazard_report_forms")
 }
 
+// Enhanced HazardReportSubmission model for detailed form data
 model HazardReportSubmission {
-  id          String            @id @default(cuid())
-  companyId   String
-  formId      String
-  userId      String
-  jobSiteId   String?
-  submittedAt DateTime          @default(now())
-  company     Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  form        HazardReportForm  @relation(fields: [formId], references: [id], onDelete: Cascade)
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id                      String            @id @default(cuid())
+  companyId               String
+  formId                  String
+  userId                  String?
+  jobSiteId               String?
+  
+  project                 String
+  date                    DateTime
+  address                 String
+  suburb                  String?
+  state                   String?
+  postCode                String?
+  hazardDescription       String
+  reportedBy              String
+  signature               String?           // Base64 signature data
+  
+  correctiveActions       String?
+  actionTimeframe         ActionTimeframe?
+  completedByFirstName    String?
+  completedByLastName     String?
+  completedSignature      String?           // Base64 signature data
+  dateCompleted           DateTime?
+  
+  attachments             Json?             
+  
+  status                  HazardReportStatus @default(PENDING)
+  
+  submittedAt             DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+  
+  company                 Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  form                    HazardReportForm  @relation(fields: [formId], references: [id], onDelete: Cascade)
+  user                    User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   @@map("hazard_report_submissions")
 }
 
@@ -866,19 +686,55 @@ model SwmsInspectionForm {
   @@map("swms_inspection_forms")
 }
 
+// Enhanced SwmsInspectionSubmission model for detailed form data
 model SwmsInspectionSubmission {
-  id          String             @id @default(cuid())
-  companyId   String
-  formId      String
-  userId      String
-  jobSiteId   String?
-  submittedAt DateTime           @default(now())
-  company     Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  form        SwmsInspectionForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id                          String            @id @default(cuid())
+  companyId                   String
+  formId                      String
+  userId                      String?           // Can be null for public submissions
+  jobSiteId                   String?
+  
+  // Contractor Details
+  companyName                 String
+  workerName                  String
+  worksUndertaken             String
+  personCompletingInspection  String
+  
+  // Items to Check (Yes/No/N/A responses)
+  inductionCompleted          InspectionAnswer
+  whiteCardRequired           InspectionAnswer
+  adequateSupervision         InspectionAnswer
+  requiredCompetencies        InspectionAnswer
+  additionalChecks            InspectionAnswer
+  
+  // File Uploads (array of Cloudinary URLs)
+  uploadedImages              Json?             // Array of {url: string, publicId: string, originalName: string}
+  
+  // Issues Identified
+  issuesIdentified            String?
+  
+  // Action Required
+  actionRequired              ActionTimeframeSWM?
+  
+  // Signature
+  signature                   String?           // Base64 signature data
+  
+  // Status tracking
+  status                      InspectionStatus  @default(PENDING)
+  
+  // Metadata
+  submittedAt                 DateTime          @default(now())
+  updatedAt                   DateTime          @updatedAt
+  
+  // Relations
+  company                     Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  form                        SwmsInspectionForm @relation(fields: [formId], references: [id], onDelete: Cascade)
+  user                        User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   @@map("swms_inspection_submissions")
 }
+
+
 
 model DirectorWorksiteChecklistForm {
   id              String                               @id @default(cuid())
@@ -954,19 +810,62 @@ model VehicleInspectionForm {
   @@map("vehicle_inspection_forms")
 }
 
+// Enhanced VehicleInspectionSubmission model for detailed form data
 model VehicleInspectionSubmission {
-  id          String                @id @default(cuid())
-  companyId   String
-  formId      String
-  userId      String
-  jobSiteId   String?
-  submittedAt DateTime              @default(now())
-  company     Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  form        VehicleInspectionForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                      String                @id @default(cuid())
+  companyId               String
+  formId                  String
+  userId                  String?               // Can be null for public submissions
+  jobSiteId               String?
+  
+  // Basic Vehicle Information
+  date                    DateTime              @default(now())
+  vehicleType             String                // e.g., HINO
+  licensePlate            String
+  mileage                 Float
+  
+  // Vehicle Photo (stored as Cloudinary URL or base64)
+  vehiclePhotoUrl         String?               // Cloudinary URL after upload
+  vehiclePhotoData        String?               // Base64 data before upload
+  
+  // Engine & Fluid Checks (pass/fail for each)
+  engineOil               CheckResult
+  coolantLevel            CheckResult
+  brakeFluidLevel         CheckResult
+  steeringFluidLevel      CheckResult
+  washerFluidLevel        CheckResult
+  
+  // External Checks (pass/fail for each)
+  washerAndWipers         CheckResult
+  tyreTreadAndSidewalls   CheckResult
+  wheelNutsSecure         CheckResult
+  batteryCondition        CheckResult
+  bodyworkGlassMirrors    CheckResult
+  
+  // Safety & Final Checks
+  fireExtinguisher        CheckResult
+  cleanAndTidy            CheckResult
+  anyDefects              String                // Text description of defects
+  
+  // Signature
+  signatureUrl            String?               // Cloudinary URL after upload
+  signatureData           String?               // Base64 data before upload
+  
+  // Status and metadata
+  status                  VehicleInspectionStatus      @default(COMPLETED)
+  submittedAt             DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  
+  // Relations
+  company                 Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  form                    VehicleInspectionForm @relation(fields: [formId], references: [id], onDelete: Cascade)
+  user                    User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobSite                 JobSite?              @relation(fields: [jobSiteId], references: [id])
 
   @@map("vehicle_inspection_submissions")
 }
+
+
 
 model EwpInspectionForm {
   id              String                   @id @default(cuid())
@@ -983,19 +882,62 @@ model EwpInspectionForm {
   @@map("ewp_inspection_forms")
 }
 
-model EwpInspectionSubmission {
-  id          String            @id @default(cuid())
-  companyId   String
-  formId      String
-  userId      String
-  jobSiteId   String?
-  submittedAt DateTime          @default(now())
-  company     Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  form        EwpInspectionForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+// Updated EwpInspectionSubmission model based on EWP-Inspection.jsx analysis
 
+model EwpInspectionSubmission {
+  id                    String              @id @default(cuid())
+  companyId             String
+  formId                String
+  userId                String?             // Can be null for public submissions
+  jobSiteId             String?
+  
+  // Inspector Information
+  inspectorFirstName    String
+  inspectorLastName     String
+  inspectionDate        DateTime            @default(now())
+  
+  // Equipment Details
+  ewpType               EwpType
+  assetNumber           String
+  
+  // Checklist Results (stored as JSON for flexibility)
+  // Each checklist item: { id: number, label: string, value: 'pass' | 'fail' | 'na' | 'comment' }
+  paperworkChecks       Json                // 3 items: Operation Manual, SWMS, License
+  generalMaintenanceChecks Json             // 4 items: Cleanliness, Restraint, Gate, Estop
+  lowerUnitChecks       Json                // 3 items: Boom, Slide Pads, Pivot Pins
+  lowerControlsChecks   Json                // 4 items: Lift, Telescope, Rotation, Platform Rotation
+  upperControlsChecks   Json                // 4 items: Labels, Forward/Reverse, Steering, Travel Speeds
+  workAreaChecks        Json                // 3 items: Obstructions, Power Lines, Atmospheres
+  
+  // Media Content
+  ewpPhoto              String?             // Base64 image string from webcam (optional)
+  ewpPhotoUrl           String?             // Cloudinary URL if uploaded to cloud storage
+  
+  // Additional Information
+  comments              Json?               // Array of { itemNumber: string, comment: string }
+  signature             String?             // Base64 signature string
+  signatureUrl          String?             // Cloudinary URL for signature if needed
+  
+  // Status and Results
+  overallResult         InspectionResult    @default(PENDING)
+  criticalIssuesFound   Boolean             @default(false)
+  
+  // Metadata
+  submittedAt           DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  
+  // Relations
+  company               Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  form                  EwpInspectionForm   @relation(fields: [formId], references: [id], onDelete: Cascade)
+  user                  User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobSite               JobSite?            @relation(fields: [jobSiteId], references: [id])
+  
   @@map("ewp_inspection_submissions")
 }
+
+
+
+
 
 model TelehandlerInspectionForm {
   id              String                           @id @default(cuid())
@@ -1070,19 +1012,123 @@ model SiteManagerInspectionForm {
   @@map("site_manager_inspection_forms")
 }
 
+// Enhanced SiteManagerInspectionSubmission model for detailed form data
 model SiteManagerInspectionSubmission {
-  id          String                    @id @default(cuid())
-  companyId   String
-  formId      String
-  userId      String
-  jobSiteId   String?
-  submittedAt DateTime                  @default(now())
-  company     Company                   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  form        SiteManagerInspectionForm @relation(fields: [formId], references: [id], onDelete: Cascade)
-  user        User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                      String                    @id @default(cuid())
+  companyId               String
+  formId                  String
+  userId                  String?
+  jobSiteId               String?
+  
+  // Basic Information
+  siteName                String
+  companyName             String?
+  positionHeld            String?
+  firstName               String
+  lastName                String
+  mobileNumber            String
+  email                   String?
+  comments                String?
+  
+  // Digital Signature
+  signature               String?                   // Base64 signature data
+  
+  housekeepingData        Json?                     // HOUSEKEEPING & PERIMETER
+  workAtHeightsData       Json?                     // WORK AT HEIGHTS
+  electricalData          Json?                     // ELECTRICAL
+  plantEquipmentData      Json?                     // PLANT & MOBILE EQUIPMENT
+  hazardousSubstancesData Json?                     // HAZARDOUS SUBSTANCES
+  accessLaddersData       Json?                     // ACCESS/LADDERS/SCAFFOLDING
+  trafficControlData      Json?                     // TRAFFIC CONTROL
+  exclusionZonesData      Json?                     // EXCLUSION ZONES/TEMPORARY WORKS
+  ppeData                 Json?                     // PERSONAL PROTECTIVE EQUIPMENT
+  storageData             Json?                     // STORAGE & CONTAINMENT
+  publicProtectionData    Json?                     // PUBLIC & SITE PROTECTION
+  amenitiesData           Json?                     // AMENITIES
+  fireProtectionData      Json?                     // FIRE PROTECTION & EMERGENCIES
+  overheadPowerlinesData  Json?                     // WORKING NEAR OVERHEAD POWERLINES
+  safeworkEpaData         Json?                     // SAFEWORK-EPA VISITS
+  
+  
+  // Photos - stored as Cloudinary URLs or Base64 strings
+  photos                  Json?                     // Array of photo objects with section mapping
+  
+  // Status and metadata
+  status                  SiteManagerInspectionStatus @default(DRAFT)
+  inspectionDate          DateTime                  @default(now())
+  
+  // PDF generation
+  pdfUrl                  String?                   // Generated PDF URL if stored
+  
+  // Metadata
+  submittedAt             DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  
+  // Relations
+  company                 Company                   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  form                    SiteManagerInspectionForm @relation(fields: [formId], references: [id], onDelete: Cascade)
+  user                    User?                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobSite                 JobSite?                  @relation(fields: [jobSiteId], references: [id])
 
   @@map("site_manager_inspection_submissions")
 }
+
+// Status enum for the inspection
+enum SiteManagerInspectionStatus {
+  DRAFT
+  SUBMITTED
+  REVIEWED
+  APPROVED
+  REJECTED
+}
+
+// Example JSON structure for section data:
+/*
+housekeepingData: {
+  "1.1": "yes",           // Radio button response
+  "1.1_comment": "Area is clean and well organized",
+  "1.2": "no", 
+  "1.2_comment": "Some debris near entrance needs cleanup",
+  "1.3": "yes",
+  "1.3_comment": "",
+  "photos": [
+    {
+      "id": "photo_1",
+      "url": "https://res.cloudinary.com/xxx/image/upload/xxx.jpg",
+      "type": "cloudinary",
+      "uploadedAt": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "photo_2", 
+      "data": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ...",
+      "type": "base64",
+      "uploadedAt": "2024-01-15T10:35:00Z"
+    }
+  ]
+}
+*/
+
+// Example photos JSON structure:
+/*
+photos: [
+  {
+    "section": "housekeeping",
+    "photoId": "photo_1",
+    "url": "https://res.cloudinary.com/xxx/image/upload/xxx.jpg",
+    "type": "cloudinary",
+    "uploadedAt": "2024-01-15T10:30:00Z",
+    "filename": "housekeeping_1.jpg"
+  },
+  {
+    "section": "electrical", 
+    "photoId": "photo_2",
+    "data": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQ...",
+    "type": "base64", 
+    "uploadedAt": "2024-01-15T10:35:00Z",
+    "filename": "electrical_1.jpg"
+  }
+]
+*/
 
 model DetailedInspectionReportForm {
   id              String                              @id @default(cuid())
@@ -1209,3 +1255,209 @@ enum UserStatus {
   INACTIVE
   SUSPENDED
 }
+
+// Enums for the hazard report form
+enum ActionTimeframe {
+  IMMEDIATELY
+  WITHIN_24_HOURS
+  WITHIN_48_HOURS
+  WITHIN_7_DAYS
+}
+
+enum HazardReportStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  REVIEWED
+}
+
+enum StatusOfInjuredParty {
+  WORKER
+  SUBCONTRACTOR
+  VISITOR
+  OTHER
+}
+
+enum YesNoAnswer {
+  YES
+  NO
+}
+
+enum IncidentReportStatus {
+  PENDING
+  UNDER_INVESTIGATION
+  COMPLETED
+  REVIEWED
+  CLOSED
+}
+
+// // New enums for SWMS Inspection
+// enum InspectionAnswer {
+//   YES
+//   NO
+//   NA
+// }
+
+// enum ActionTimeframeSWM {
+//   WITHIN_1_DAY
+//   WITHIN_7_DAYS
+//   WITHIN_14_DAYS
+//   NO_ACTION_REQUIRED
+// }
+
+// enum InspectionStatus {
+//   PENDING
+//   IN_PROGRESS
+//   COMPLETED
+//   REVIEWED
+// }
+
+
+// New enums for SWMS Inspection
+enum InspectionAnswer {
+  YES
+  NO
+  NA
+}
+
+// Specific enum for SWMS inspection to avoid conflicts
+enum ActionTimeframeSWM {
+  WITHIN_1_DAY
+  WITHIN_7_DAYS
+  WITHIN_14_DAYS
+  NO_ACTION_REQUIRED
+}
+
+enum InspectionStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  REVIEWED
+}
+
+
+
+// Enum for EWP Types based on the form options
+enum EwpType  {
+  TRUCK_MOUNTED_KNUCKLE_BOOM  // "Truck Mounted EWP (Knuckle Boom)"
+  SCISSOR_LIFT                // "Scissor Lift"  
+  BOOM_LIFT                   // "Boom Lift"
+  ONE_PERSON_LIFT             // "One Person Lift"
+}
+
+// Enum for inspection results
+enum InspectionResult {
+  PENDING
+  PASS
+  FAIL_MINOR_ISSUES
+  FAIL_CRITICAL_ISSUES
+  REQUIRES_REVIEW
+}
+
+enum CheckResult {
+  PASS
+  FAIL
+}
+
+enum VehicleInspectionStatus {
+  DRAFT
+  COMPLETED
+  REVIEWED
+  FLAGGED      
+}
+
+
+// Add these models to your existing schema.prisma file
+
+// AI Knowledge Base Models
+model KnowledgeBase {
+  id          String   @id @default(cuid())
+  state       String   // "victoria", "queensland", "south_australia", etc.
+  category    String   // "whs-acts-regulations", "code-of-practice", etc.
+  title       String
+  content     String   @db.Text
+  sourceUrl   String?
+  summary     String?  @db.Text // AI-generated summary for quick context
+  keywords    String[] // For better search and matching
+  lastUpdated DateTime @default(now())
+  isActive    Boolean  @default(true)
+  version     Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([state, category])
+  @@index([state, isActive])
+  @@index([keywords])
+  @@map("knowledge_bases")
+}
+
+model ChatSession {
+  id          String   @id @default(cuid())
+  companyId   String
+  userId      String?
+  userState   String   // User's state for context
+  sessionId   String   @unique
+  isActive    Boolean  @default(true)
+  metadata    Json?    // Store additional session context
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  messages    ChatMessage[]
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([companyId, isActive])
+  @@index([userState])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id          String      @id @default(cuid())
+  sessionId   String
+  role        MessageRole // USER, ASSISTANT, SYSTEM
+  content     String      @db.Text
+  metadata    Json?       // Store context used, tokens, etc.
+  tokensUsed  Int?        // Track API usage
+  responseTime Int?       // Track performance
+  timestamp   DateTime    @default(now())
+  
+  session     ChatSession @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade)
+  
+  @@index([sessionId, timestamp])
+  @@map("chat_messages")
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+model KnowledgeImportJob {
+  id          String           @id @default(cuid())
+  state       String
+  category    String
+  urls        String[]
+  status      ImportJobStatus  @default(PENDING)
+  progress    Int              @default(0)
+  totalUrls   Int
+  processedUrls Int            @default(0)
+  successUrls Int              @default(0)
+  failedUrls  Int              @default(0)
+  errorLog    String?          @db.Text
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  
+  @@map("knowledge_import_jobs")
+}
+
+enum ImportJobStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+

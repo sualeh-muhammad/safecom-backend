@@ -20,6 +20,21 @@ const { createHash, verifyHash, generatePublicUrl } = require('./src/utils/hashU
 const superAdminRoutes = require('./src/routes/superAdminCompany');
 
 
+//////// Form Routes
+
+const SiteSignInRoutes = require('./src/routes/Forms/siteSignIn')
+const psychosocialHazardRoutes = require('./src/routes/Forms/psychosocialHazard');
+// const hazardReportRoutes = require('./src/routes/Forms/hazardReport')
+const incidentReportRoutes = require('./src/routes/Forms/incidentReport')
+const preStartStaffRoutes = require('./src/routes/Forms/preStartStaff')
+const swmsInspectionRoutes = require('./src/routes/Forms/swmsInspection')
+const ewpInspectionRoutes = require('./src/routes/Forms/ewpInspection')
+const vehicleInspectionRoutes = require('./src/routes/Forms/vehicleInspection')
+const siteManagerInspectionRoutes = require('./src/routes/Forms/siteManagerInspection')
+const knowledgeBaseRoutes = require('./src/routes/knowledgeBase');
+const chatRoutes = require('./src/routes/chat');
+
+
 const app = express();
 
 // Security middleware
@@ -50,13 +65,7 @@ app.use(cors({
   credentials: true
 }));
 
-// Rate limiting
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 10, // limit each IP to 100 requests per windowMs
-//   message: 'Too many requests from this IP, please try again later.'
-// });
-// app.use('/api/', limiter);
+
 
 // Logging
 app.use(morgan('combined'));
@@ -66,17 +75,6 @@ app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Extract tenant from subdomain
-// app.use(extractTenant);
-
-// Health check endpoint
-// app.get('/health', (req, res) => {
-//   res.json({ 
-//     status: 'OK', 
-//     timestamp: new Date().toISOString(),
-//     environment: process.env.NODE_ENV 
-//   });
-// });
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({ 
@@ -117,9 +115,39 @@ app.use('/api/forms' ,  formRoutes)
 app.use('/api/submission' , submissionRoutes)
 app.use('/api/admin-companies' , adminCompanyRoutes)
 app.use('/api/public-forms' , publicFormsRoutes)
-
-
 app.use('/api/super-admin', superAdminRoutes);
+
+
+
+//*******************  Form Routes  ******************* //
+
+
+app.use('/api/site-signin', SiteSignInRoutes);
+app.use('/api/psychosocial-hazard', psychosocialHazardRoutes); 
+// app.use('/api/hazard-report', hazardReportRoutes); 
+app.use('/api/incident-report', incidentReportRoutes); // Add this line
+
+app.use('/api/pre-start-staff', preStartStaffRoutes); // Add this line
+app.use('/api/swms-inspection' , swmsInspectionRoutes);
+app.use('/api/ewp-inspection' , ewpInspectionRoutes );
+app.use('/api/vehicle-inspection' , vehicleInspectionRoutes );
+app.use('/api/site-manager-inspection' ,  siteManagerInspectionRoutes)
+app.use('/api/knowledge-base', knowledgeBaseRoutes);
+app.use('/api/chat', chatRoutes);
+
+// Test endpoint to verify setup
+app.get('/api/test-ai-setup', (req, res) => {
+  res.json({ 
+    success: true, 
+    message: 'AI routes are working',
+    openaiConfigured: !!process.env.OPENAI_API_KEY,
+    routes: [
+      '/api/chat/user-state',
+      '/api/chat',
+      '/api/knowledge-base'
+    ]
+  });
+});
 
 
 

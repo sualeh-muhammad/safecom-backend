@@ -1,3 +1,4 @@
+// backend/services/authService.js - Updated with company status check
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
@@ -32,7 +33,7 @@ class AuthService {
 
   async login(email, password) {
     try {
-      // Find user by email
+      // Find user by email with company information
       const user = await prisma.user.findUnique({
         where: { email },
         include: {
@@ -43,7 +44,9 @@ class AuthService {
               subdomain: true,
               logoImageUrl: true,
               currentPlan: true,
-              subscriptionStatus: true
+              subscriptionStatus: true,
+              isActive: true, // ✅ KEY ADDITION: Include company isActive status
+              isManuallyCreated: true
             }
           },
           jobSite: {
@@ -55,13 +58,25 @@ class AuthService {
         }
       });
 
-
       if (!user) {
         throw new Error('Invalid email or password');
       }
 
       if (user.status !== 'ACTIVE') {
-        throw new Error('Account is not active');
+        throw new Error('Your account has been deactivated. Please contact support.');
+      }
+
+      if (!user.company) {
+        throw new Error('No company associated with this account. Please contact support.');
+      }
+
+      if (!user.company.isActive) {
+        throw new Error('Your company account has been deactivated. Please contact your administrator or support.');
+      }
+
+      // ✅ NEW: Additional check for subscription status (optional)
+      if (user.company.subscriptionStatus === 'CANCELLED' || user.company.subscriptionStatus === 'SUSPENDED') {
+        throw new Error('Your company subscription is inactive. Please contact your administrator to reactivate.');
       }
 
       // Check password
@@ -96,6 +111,13 @@ class AuthService {
       };
 
     } catch (error) {
+      // ✅ Specific error logging for company status issues
+      console.error('Login attempt failed:', {
+        email,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      });
+      
       throw error;
     }
   }
@@ -127,7 +149,8 @@ class AuthService {
               id: true,
               name: true,
               subdomain: true,
-              logoImageUrl: true
+              logoImageUrl: true,
+              isActive: true
             }
           }
         }

@@ -3,8 +3,10 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const getAllJobSites = async (req, res) => {
+
   try {
     const companyId = req.user.companyId; // Get from JWT token
+
 
     if (!companyId) {
       return res.status(400).json({
@@ -29,7 +31,77 @@ const getAllJobSites = async (req, res) => {
 
     res.json(jobsites);
   } catch (error) {
-    console.error("Error fetching jobsites:", error);
+
+    
+  
+    res.status(500).json({
+      error: "Internal server error",
+      message: "Failed to fetch jobsites",
+    });
+  }
+};
+
+
+const getCompanyJobSites = async (req, res) => {
+  console.log('hiting......................')
+
+  try {
+    // const companyId = req.user.companyId; // Get from JWT token
+
+
+    const {companyId} = req.params
+
+    const {formName} = req.body
+
+    console.log('formName' , formName)
+    let formNamePrisma = ''
+
+    switch (formName) {
+      case 'companyStaff':
+        formNamePrisma = 'PreStartStaffForm';
+        break;
+      default:
+        break;
+    }
+
+    if (!companyId) {
+      return res.status(400).json({
+        error: "Company ID not found",
+        message: "User must be associated with a company",
+      });
+    }
+
+    // const jobsites = await prisma.jobSite.findMany({
+    //   where: {
+    //     companyId: companyId,
+    //   },
+    //   orderBy: {
+    //     createdAt: "desc",
+    //   },
+    //   include: {
+    //     _count: {
+    //       select: { users: true }, // Count of users assigned to this jobsite
+    //     },
+    //   },
+    // });
+
+
+    const getCompany = await prisma.formNamePrisma.findFirst({
+      where: {
+        id: companyId,
+      },
+      include: {companyId: true}
+    })
+
+    console.log('getCompany', getCompany)
+
+    res.json(true)
+
+    // res.json(jobsites);
+  } catch (error) {
+
+    
+  
     res.status(500).json({
       error: "Internal server error",
       message: "Failed to fetch jobsites",
@@ -39,7 +111,10 @@ const getAllJobSites = async (req, res) => {
 
 
 
+
 const getJobSiteById = async (req, res) => {
+
+
   try {
     const { id } = req.params;
     const companyId = req.user.companyId;
@@ -277,4 +352,4 @@ const deleteJobSite = async (req, res) => {
 
 
 
-module.exports = {getAllJobSites , getJobSiteById , createNewJobSites , updateJobSite , deleteJobSite}
+module.exports = {getAllJobSites , getCompanyJobSites ,  getJobSiteById , createNewJobSites , updateJobSite , deleteJobSite}
