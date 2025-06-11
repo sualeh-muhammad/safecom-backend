@@ -155,10 +155,61 @@ async function hashPassword(password) {
     return await bcrypt.hash(password, 12);
   }
 
+  app.post('/api/create-company', async (req, res) => {
+  try {
+    const { name, subdomain, logoImageUrl, currentPlan, subscriptionStatus } = req.body;
+
+    if (!name || !subdomain) {
+      return res.status(400).json({ error: 'Name and subdomain are required' });
+    }
+
+    const existingCompany = await prisma.company.findUnique({
+      where: { subdomain }
+    });
+
+    if (existingCompany) {
+      return res.status(400).json({ error: 'Company with this subdomain already exists' });
+    }
+
+    // Create new company
+    const company = await prisma.company.create({
+      data: {
+        name,
+        subdomain,
+        logoImageUrl,
+        currentPlan,
+        subscriptionStatus
+      }
+    });
+
+    res.status(201).json({ message: 'Company created successfully', company });
+  } catch (error) {
+    console.error('Error creating company:', error);
+    res.status(500).json({ error: 'Internal server error', message: 'Failed to create company' });
+  }})
+
+app.get('/api/get-companies' , async(req,res)=>{
+  try {
+    const companies = await prisma.company.findMany({
+      select: {
+        id: true,
+        name: true,
+        subdomain: true,
+        logoImageUrl: true,
+        currentPlan: true,
+        subscriptionStatus: true
+      }
+    });
+    res.status(200).json(companies);
+  } catch (error) {
+    console.error('Error fetching companies:', error);
+    res.status(500).json({ error: 'Internal server error', message: 'Failed to fetch companies' });
+  }
+})
 
 app.post('/api/create-super-admin' , async(req, res) => {
   try {
-      const {email, password} = req.body
+      const {email, password , companyId} = req.body
       if (!email || !password) {
         return res.status(400).json({ error: 'Email and password are required' });
       }
@@ -175,13 +226,13 @@ app.post('/api/create-super-admin' , async(req, res) => {
           role: 'SUPER_ADMIN',
           firstName: 'Super',
           lastName: 'Admin',
-          companyId: 'cmb70d5qx0000tufwj4r5kalj'
+          companyId: companyId || null
         }
       });
       res.status(201).json({ message: 'Super admin created successfully', user });
   } catch (error) {
     console.error('Error creating super admin:', error);
-    res.status(500).json({ error: 'Internal server error', message: 'Failed to create super admin' , error: error });
+    res.status(500).json({ error: 'Internal server error', message: 'Failed to create super admin' });
   }
 })
 
