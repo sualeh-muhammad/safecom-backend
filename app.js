@@ -59,16 +59,24 @@ app.use(cors({
       /\.safecom\.com$/
     ];
     
-    if (!origin || allowedOrigins.some(allowed => 
-      typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
-    )) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+     // Handle no origin first
+if (!origin) {
+  callback(null, true);
+  return;
+}
+
+// Then check allowed origins
+if (allowedOrigins.some(allowed => 
+  typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
+)) {
+  callback(null, true);
+} else {
+  callback(new Error('Not allowed by CORS'));
+}
   },
   credentials: true
 }));
+
 
 
 
