@@ -608,28 +608,28 @@ router.get('/form-types', async (req, res) => {
     const formTypes = [
       // General Forms
       { key: 'siteSignIn', label: 'Site Sign-In', description: 'Daily worker sign-in form with time tracking', category: 'General' },
-      { key: 'siteInduction', label: 'Site Induction', description: 'New worker safety induction and orientation', category: 'General' },
-      { key: 'safetyCheck', label: 'Safety Check', description: 'Daily site safety compliance checklist', category: 'General' },
+      // { key: 'siteInduction', label: 'Site Induction', description: 'New worker safety induction and orientation', category: 'General' },
+      // { key: 'safetyCheck', label: 'Safety Check', description: 'Daily site safety compliance checklist', category: 'General' },
       { key: 'incidentReport', label: 'Incident Report', description: 'Workplace incident or near-miss reporting', category: 'General' },
-      { key: 'dailyReport', label: 'Daily Report', description: 'End of day project status and progress report', category: 'General' },
+      // { key: 'dailyReport', label: 'Daily Report', description: 'End of day project status and progress report', category: 'General' },
       { key: 'psychosocialHazard', label: 'Psychosocial Hazards', description: 'Documentation of workplace psychosocial hazards', category: 'General' },
-      { key: 'companyInduction', label: 'Company Induction', description: 'Mandatory induction checklist for new workers', category: 'General' },
+      // { key: 'companyInduction', label: 'Company Induction', description: 'Mandatory induction checklist for new workers', category: 'General' },
       { key: 'preStartStaff', label: 'Pre Start Staff', description: 'Pre-work checklist for staff', category: 'General' },
-      { key: 'dailyPreStartContractor', label: 'Daily Pre Start Contractors', description: 'Daily pre-work checklist for contractors', category: 'General' },
-      { key: 'toolboxMeeting', label: 'Toolbox Meeting', description: 'Safety meeting documentation', category: 'General' },
-      { key: 'hazardRiskAssessment', label: 'Hazard Risk Assessment', description: 'Form to assess potential hazards on site', category: 'General' },
+      // { key: 'dailyPreStartContractor', label: 'Daily Pre Start Contractors', description: 'Daily pre-work checklist for contractors', category: 'General' },
+      // { key: 'toolboxMeeting', label: 'Toolbox Meeting', description: 'Safety meeting documentation', category: 'General' },
+      // { key: 'hazardRiskAssessment', label: 'Hazard Risk Assessment', description: 'Form to assess potential hazards on site', category: 'General' },
       { key: 'hazardReport', label: 'Hazard Report', description: 'Form to report hazards on site', category: 'General' },
       { key: 'swmsInspection', label: 'SWMS Inspection', description: 'Checklist for safety inspections and SWMS compliance', category: 'General' },
-      { key: 'directorWorksiteChecklist', label: 'Director Worksite Checklist', description: 'Checklist for management review of worksite conditions', category: 'General' },
-      { key: 'taskCard', label: 'Task Card', description: 'Task card for management', category: 'General' },
+      // { key: 'directorWorksiteChecklist', label: 'Director Worksite Checklist', description: 'Checklist for management review of worksite conditions', category: 'General' },
+      // { key: 'taskCard', label: 'Task Card', description: 'Task card for management', category: 'General' },
       
       // Inspection Forms
       { key: 'vehicleInspection', label: 'Vehicle Inspection', description: 'Regular vehicle safety inspection form', category: 'Inspection' },
       { key: 'ewpInspection', label: 'EWP Inspection', description: 'Elevated Work Platform inspection checklist', category: 'Inspection' },
-      { key: 'telehandlerInspection', label: 'Telehandler Inspection', description: 'Daily inspection for telehandler equipment', category: 'Inspection' },
-      { key: 'employeeChecklist', label: 'Employee Checklist', description: 'Verification checklist for workers', category: 'Inspection' },
+      // { key: 'telehandlerInspection', label: 'Telehandler Inspection', description: 'Daily inspection for telehandler equipment', category: 'Inspection' },
+      // { key: 'employeeChecklist', label: 'Employee Checklist', description: 'Verification checklist for workers', category: 'Inspection' },
       { key: 'siteManagerInspection', label: 'Site Manager Inspection', description: 'Daily site inspection checklist', category: 'Inspection' },
-      { key: 'detailedInspectionReport', label: 'Detailed Inspection Report', description: 'Comprehensive site inspection report', category: 'Inspection' }
+      // { key: 'detailedInspectionReport', label: 'Detailed Inspection Report', description: 'Comprehensive site inspection report', category: 'Inspection' }
     ];
 
     res.json(formTypes);

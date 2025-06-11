@@ -1,7 +1,9 @@
+const { Prisma } = require('@prisma/client');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');  
 const morgan = require('morgan');
+const bcrypt = require('bcryptjs');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 const onboardingRoutes = require('./src/routes/onboarding');
@@ -18,7 +20,7 @@ const publicFormsRoutes = require('./src/routes/publicForms');
 const { createHash, verifyHash, generatePublicUrl } = require('./src/utils/hashUtils');
 // const superAdminRoutes = require('./src/routes/superAdmin');
 const superAdminRoutes = require('./src/routes/superAdminCompany');
-
+const { PrismaClient } = require('@prisma/client');
 
 //////// Form Routes
 
@@ -33,12 +35,15 @@ const vehicleInspectionRoutes = require('./src/routes/Forms/vehicleInspection')
 const siteManagerInspectionRoutes = require('./src/routes/Forms/siteManagerInspection')
 const knowledgeBaseRoutes = require('./src/routes/knowledgeBase');
 const chatRoutes = require('./src/routes/chat');
+const StaffRoutes = require('./src/routes/staff')
 
 
 const app = express();
 
 // Security middleware
 app.use(helmet());
+const prisma = new PrismaClient();
+
 
 // CORS configuration
 app.use(cors({
@@ -116,6 +121,7 @@ app.use('/api/submission' , submissionRoutes)
 app.use('/api/admin-companies' , adminCompanyRoutes)
 app.use('/api/public-forms' , publicFormsRoutes)
 app.use('/api/super-admin', superAdminRoutes);
+app.use('/api/users' , StaffRoutes)
 
 
 
@@ -124,23 +130,59 @@ app.use('/api/super-admin', superAdminRoutes);
 
 app.use('/api/site-signin', SiteSignInRoutes);
 app.use('/api/psychosocial-hazard', psychosocialHazardRoutes); 
-// app.use('/api/hazard-report', hazardReportRoutes); 
-app.use('/api/incident-report', incidentReportRoutes); // Add this line
-
-app.use('/api/pre-start-staff', preStartStaffRoutes); // Add this line
+app.use('/api/incident-report', incidentReportRoutes); 
+app.use('/api/pre-start-staff', preStartStaffRoutes); 
 app.use('/api/swms-inspection' , swmsInspectionRoutes);
 app.use('/api/ewp-inspection' , ewpInspectionRoutes );
 app.use('/api/vehicle-inspection' , vehicleInspectionRoutes );
-app.use('/api/site-manager-inspection' ,  siteManagerInspectionRoutes)
+app.use('/api/site-manager-inspection' ,  siteManagerInspectionRoutes);
+
+
 app.use('/api/knowledge-base', knowledgeBaseRoutes);
 app.use('/api/chat', chatRoutes);
+
+ 
+
+async function hashPassword(password) {
+    return await bcrypt.hash(password, 12);
+  }
+
+
+app.post('/api/create-super-admin' , async(req, res) => {
+  try {
+      const {email, password} = req.body
+      if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+      }
+      const findUser = await prisma.user.findUnique({
+        where: { email }
+      });
+      if (findUser) {
+        return res.status(400).json({ error: 'User already exists' });
+      }
+      const user = await prisma.user.create({
+        data: {
+          email,
+          password: await hashPassword(password),
+          role: 'SUPER_ADMIN',
+          firstName: 'Super',
+          lastName: 'Admin',
+          companyId: 'cmb70d5qx0000tufwj4r5kalj'
+        }
+      });
+      res.status(201).json({ message: 'Super admin created successfully', user });
+  } catch (error) {
+    console.error('Error creating super admin:', error);
+    res.status(500).json({ error: 'Internal server error', message: 'Failed to create super admin' });
+  }
+})
 
 // Test endpoint to verify setup
 app.get('/api/test-ai-setup', (req, res) => {
   res.json({ 
     success: true, 
     message: 'AI routes are working',
-    openaiConfigured: !!process.env.OPENAI_API_KEY,
+    openaiConfigured: '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',
     routes: [
       '/api/chat/user-state',
       '/api/chat',

@@ -112,6 +112,9 @@ model JobSite {
   ewpInspectionSubmissions          EwpInspectionSubmission[]
   vehicleInspectionSubmissions      VehicleInspectionSubmission[]
   siteManagerInspectionSubmissions  SiteManagerInspectionSubmission[]
+  incidentReportSubmissions         IncidentReportSubmission[]
+  siteSignInSubmissions             SiteSignInSubmission[]
+ 
   @@map("job_sites")
 }
 model User {
@@ -222,6 +225,8 @@ model SiteSignInSubmission {
   form                    SiteSignInForm        @relation(fields: [formId], references: [id], onDelete: Cascade)
   user                    User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   
+  jobSite                 JobSite?                  @relation(fields: [jobSiteId], references: [id])
+
   @@map("site_sign_in_submissions")
 }
 
@@ -373,6 +378,7 @@ model IncidentReportSubmission {
   company                 Company                   @relation(fields: [companyId], references: [id], onDelete: Cascade)
   form                    IncidentReportForm        @relation(fields: [formId], references: [id], onDelete: Cascade)
   user                    User?                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobSite                 JobSite?                  @relation(fields: [jobSiteId], references: [id])
   
   @@map("incident_report_submissions")
 }

@@ -1,4 +1,3 @@
-// backend/routes/superAdminCompany.js
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const { uploadToCloudinary, upload, handleMulterError } = require('../middleware/upload');
@@ -421,7 +420,6 @@ router.get('/companies/:id', async (req, res) => {
 router.get('/available-forms', async (req, res) => {
   try {
     const availableForms = [
-      // EXISTING FORMS
       { key: 'siteSignIn', name: 'Site Sign-In', description: 'Daily worker sign-in form with time tracking', category: 'General' },
       // { key: 'siteInduction', name: 'Site Induction', description: 'New worker safety induction and orientation', category: 'General' },
       // { key: 'safetyCheck', name: 'Safety Check', description: 'Daily site safety compliance checklist', category: 'General' },
@@ -430,23 +428,23 @@ router.get('/available-forms', async (req, res) => {
       
       // NEW GENERAL FORMS
       { key: 'psychosocialHazard', name: 'Psychosocial Hazards', description: 'Documentation of workplace psychosocial hazards', category: 'General' },
-      { key: 'companyInduction', name: 'Company Induction', description: 'Mandatory induction checklist for new workers', category: 'General' },
+      // { key: 'companyInduction', name: 'Company Induction', description: 'Mandatory induction checklist for new workers', category: 'General' },
       { key: 'preStartStaff', name: 'Pre Start Staff', description: 'Pre-work checklist for staff', category: 'General' },
-      { key: 'dailyPreStartContractor', name: 'Daily Pre Start Contractors', description: 'Daily pre-work checklist for contractors', category: 'General' },
-      { key: 'toolboxMeeting', name: 'Toolbox Meeting', description: 'Safety meeting documentation', category: 'General' },
-      { key: 'hazardRiskAssessment', name: 'Hazard Risk Assessment', description: 'Form to assess potential hazards on site', category: 'General' },
+      // { key: 'dailyPreStartContractor', name: 'Daily Pre Start Contractors', description: 'Daily pre-work checklist for contractors', category: 'General' },
+      // { key: 'toolboxMeeting', name: 'Toolbox Meeting', description: 'Safety meeting documentation', category: 'General' },
+      // { key: 'hazardRiskAssessment', name: 'Hazard Risk Assessment', description: 'Form to assess potential hazards on site', category: 'General' },
       { key: 'hazardReport', name: 'Hazard Report', description: 'Form to report hazards on site', category: 'General' },
       { key: 'swmsInspection', name: 'SWMS Inspection', description: 'Checklist for safety inspections and SWMS compliance', category: 'General' },
-      { key: 'directorWorksiteChecklist', name: 'Director Worksite Checklist', description: 'Checklist for management review of worksite conditions', category: 'General' },
-      { key: 'taskCard', name: 'Task Card', description: 'Task card for management', category: 'General' },
+      // { key: 'directorWorksiteChecklist', name: 'Director Worksite Checklist', description: 'Checklist for management review of worksite conditions', category: 'General' },
+      // { key: 'taskCard', name: 'Task Card', description: 'Task card for management', category: 'General' },
       
       // NEW INSPECTION FORMS
       { key: 'vehicleInspection', name: 'Vehicle Inspection', description: 'Regular vehicle safety inspection form', category: 'Inspection' },
       { key: 'ewpInspection', name: 'EWP Inspection', description: 'Elevated Work Platform inspection checklist', category: 'Inspection' },
-      { key: 'telehandlerInspection', name: 'Telehandler Inspection', description: 'Daily inspection for telehandler equipment', category: 'Inspection' },
-      { key: 'employeeChecklist', name: 'Employee Checklist', description: 'Verification checklist for workers', category: 'Inspection' },
+      // { key: 'telehandlerInspection', name: 'Telehandler Inspection', description: 'Daily inspection for telehandler equipment', category: 'Inspection' },
+      // { key: 'employeeChecklist', name: 'Employee Checklist', description: 'Verification checklist for workers', category: 'Inspection' },
       { key: 'siteManagerInspection', name: 'Site Manager Inspection', description: 'Daily site inspection checklist', category: 'Inspection' },
-      { key: 'detailedInspectionReport', name: 'Detailed Inspection Report', description: 'Comprehensive site inspection report', category: 'Inspection' }
+      // { key: 'detailedInspectionReport', name: 'Detailed Inspection Report', description: 'Comprehensive site inspection report', category: 'Inspection' }
     ];
 
     // Group by category

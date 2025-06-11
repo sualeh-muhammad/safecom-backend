@@ -3,10 +3,21 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const getAllJobSites = async (req, res) => {
-
   try {
-    const companyId = req.user.companyId; // Get from JWT token
+    // Add proper error logging
+    console.log('getAllJobSites called');
+    console.log('req.user:', req.user);
 
+    // Check if auth middleware is working
+    if (!req.user) {
+      return res.status(401).json({
+        error: "Authentication required",
+        message: "User not authenticated",
+      });
+    }
+
+    const companyId = req.user.companyId;
+    console.log('companyId from token:', companyId);
 
     if (!companyId) {
       return res.status(400).json({
@@ -24,90 +35,89 @@ const getAllJobSites = async (req, res) => {
       },
       include: {
         _count: {
-          select: { users: true }, // Count of users assigned to this jobsite
+          select: { users: true },
         },
       },
     });
 
+    console.log('Found jobsites:', jobsites.length);
     res.json(jobsites);
-  } catch (error) {
-
     
-  
+  } catch (error) {
+    console.error('Error in getAllJobSites:', error);
+    console.error('Error stack:', error.stack);
+    
     res.status(500).json({
       error: "Internal server error",
       message: "Failed to fetch jobsites",
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
 
-
+// Fix the getCompanyJobSites function as well
 const getCompanyJobSites = async (req, res) => {
-  console.log('hiting......................')
-
   try {
-    // const companyId = req.user.companyId; // Get from JWT token
+    console.log('getCompanyJobSites called');
+    
+    const { companyId } = req.params;
+    const { formName } = req.body;
 
+    console.log('companyId from params:', companyId);
+    console.log('formName from body:', formName);
 
-    const {companyId} = req.params
-
-    const {formName} = req.body
-
-    console.log('formName' , formName)
-    let formNamePrisma = ''
+    let formNamePrisma = '';
 
     switch (formName) {
       case 'companyStaff':
         formNamePrisma = 'PreStartStaffForm';
         break;
       default:
+        formNamePrisma = 'DefaultForm'; // Provide a default
         break;
     }
 
     if (!companyId) {
       return res.status(400).json({
         error: "Company ID not found",
-        message: "User must be associated with a company",
+        message: "Company ID is required",
       });
     }
 
-    // const jobsites = await prisma.jobSite.findMany({
-    //   where: {
-    //     companyId: companyId,
-    //   },
-    //   orderBy: {
-    //     createdAt: "desc",
-    //   },
-    //   include: {
-    //     _count: {
-    //       select: { users: true }, // Count of users assigned to this jobsite
-    //     },
-    //   },
-    // });
-
-
-    const getCompany = await prisma.formNamePrisma.findFirst({
+    // Fix the Prisma query - formNamePrisma should be a table name, not a variable
+    // This looks like it should be querying a company table
+    const getCompany = await prisma.company.findFirst({
       where: {
         id: companyId,
       },
-      include: {companyId: true}
-    })
+      include: {
+        jobSites: true // Include related jobsites
+      }
+    });
 
-    console.log('getCompany', getCompany)
+    console.log('getCompany result:', getCompany);
 
-    res.json(true)
+    if (!getCompany) {
+      return res.status(404).json({
+        error: "Company not found",
+        message: "Company with this ID does not exist",
+      });
+    }
 
-    // res.json(jobsites);
+    res.json(getCompany);
+
   } catch (error) {
-
+    console.error('Error in getCompanyJobSites:', error);
+    console.error('Error stack:', error.stack);
     
-  
     res.status(500).json({
       error: "Internal server error",
-      message: "Failed to fetch jobsites",
+      message: "Failed to fetch company jobsites",
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
+
 
 
 

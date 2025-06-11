@@ -6,7 +6,7 @@ const OpenAI = require('openai');
 
 const prisma = new PrismaClient();
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: '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',
 });
 
 class KnowledgeScraper {
