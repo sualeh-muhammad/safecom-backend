@@ -181,11 +181,11 @@ app.post('/api/create-super-admin' , async(req, res) => {
       res.status(201).json({ message: 'Super admin created successfully', user });
   } catch (error) {
     console.error('Error creating super admin:', error);
-    res.status(500).json({ error: 'Internal server error', message: 'Failed to create super admin' });
+    res.status(500).json({ error: 'Internal server error', message: 'Failed to create super admin' , error: error });
   }
 })
 
-// Test endpoint to verify setup
+// Test endpoint to verify setu p
 app.get('/api/test-ai-setup', (req, res) => {
   res.json({ 
     success: true, 
