@@ -182,7 +182,7 @@ app.get('/api/test-ai-setup', (req, res) => {
   res.json({ 
     success: true, 
     message: 'AI routes are working',
-    openaiConfigured: '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',
+    openaiConfigured: !!process.env.OPENAI_API_KEY,
     routes: [
       '/api/chat/user-state',
       '/api/chat',
